@@ -5,14 +5,16 @@
 //  Created by Elena Lucher on 6.5.23..
 //
 
+import SwiftUI
+import Combine
 import ARKit
 import RealityKit
 import FocusEntity
 
 class FocusARView: ARView {
     var focusEntity: FocusEntity?
-    let networkManager = NetworkManager()
-   
+    var cupEntity: ModelEntity?
+    
     required init(frame frameRect: CGRect){
         super.init(frame: frameRect)
         focusEntity = FocusEntity(on: self, focus: .classic)
@@ -38,49 +40,47 @@ class FocusARView: ARView {
     func enableTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(recognizer:)))
         self.addGestureRecognizer(tapGesture)
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongTapGesture))
+        self.addGestureRecognizer(longPressRecognizer)
     }
     
     @IBAction func handleTapGesture(recognizer: UITapGestureRecognizer) {
         let tapLocation = recognizer.location(in: self)
-        let results = self.raycast(from: tapLocation,
+        if let entity = self.entity(at: tapLocation), entity.name == "cup" {
+                    
+        } else {
+            let results = self.raycast(from: tapLocation,
                                        allowing: .estimatedPlane,
                                        alignment: .horizontal)
-        if let result = results.first {
-            let worldPosition = simd_make_float3(result.worldTransform.columns.3)
-            let cube = createCube()
-            placeObject(cube, at: worldPosition)
+            if let result = results.first {
+                let worldPosition = simd_make_float3(result.worldTransform.columns.3)
+                if let copy = cupEntity?.clone(recursive: true) as? ModelEntity{
+                    placeObject(copy, at: worldPosition)
+                }
+            }
         }
         
-        if let entity = self.entity(at: tapLocation) as? ModelEntity, entity.name == "tvScreen" {
+    }
+    
+    @IBAction func handleLongTapGesture(recognizer: UILongPressGestureRecognizer) {
+        let gestureLocation = recognizer.location(in: self)
+        if  let entity = entity(at: gestureLocation) {
+            if let anchor = entity.anchor,
+               anchor.name == "cup" {
+                anchor.removeFromParent()
+            }
+        } else {
             
         }
     }
     
-    private func createCube() -> ModelEntity {
-        let cube = MeshResource.generateBox(size: 0.2)
-        let material = SimpleMaterial(color: .red, isMetallic: true)
-        let cubeEntity = ModelEntity(mesh: cube, materials: [material])
-        return cubeEntity
-    }
-    
     func placeObject(_ object: ModelEntity, at location: SIMD3<Float>) {
+        object.generateCollisionShapes(recursive: true)
         let objectAnchor = AnchorEntity(world: location)
+        objectAnchor.name = "cup"
         objectAnchor.addChild(object)
+        installGestures(.all, for: object)
         scene.anchors.append(objectAnchor)
     }
-    
-//    private func downloadPotModel() {
-//        let potModel = ARModel(name: "pot",
-//                               modelUrlString: "https://developer.apple.com/augmented-reality/quick-look/models/teapot/teapot.usdz",
-//                               type: "usdz")
-//       networkManager.download(model: potModel, for: potsAnchor)
-//    }
-//
-//    private func downloadCupModel() {
-//        let cupModel = ARModel(name: "cup",
-//                               modelUrlString: "https://developer.apple.com/augmented-reality/quick-look/models/cupandsaucer/cup_saucer_set.usdz",
-//                               type: "usdz")
-//        networkManager.download(model: cupModel, for: potsAnchor)
-//    }
     
 }
