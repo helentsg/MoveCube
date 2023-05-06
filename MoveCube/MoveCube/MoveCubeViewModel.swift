@@ -10,7 +10,8 @@ import SwiftUI
 class MoveCubeViewModel: ObservableObject {
 
     @Published var coinsCounter: Int = 0
-    @Published var cubsCounter: Int = 0
+    @Published var cubsCounter: Int = 1
+    @Published var selectedDirection: Direction?
     
     init() {
     }

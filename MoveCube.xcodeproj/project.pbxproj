@@ -16,6 +16,9 @@
 		336CFA5C2A062EDC0066EEE0 /* ARFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA5B2A062EDC0066EEE0 /* ARFrame.swift */; };
 		336CFA5F2A0630800066EEE0 /* FocusEntity in Frameworks */ = {isa = PBXBuildFile; productRef = 336CFA5E2A0630800066EEE0 /* FocusEntity */; };
 		336CFA612A06309C0066EEE0 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA602A06309C0066EEE0 /* ARViewContainer.swift */; };
+		336CFA632A0633EB0066EEE0 /* MovementButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */; };
+		336CFA662A0635720066EEE0 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA652A0635720066EEE0 /* Direction.swift */; };
+		336CFA682A0636190066EEE0 /* MovementButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA672A0636190066EEE0 /* MovementButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		336CFA572A056FF80066EEE0 /* MoveCubeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCubeViewModel.swift; sourceTree = "<group>"; };
 		336CFA5B2A062EDC0066EEE0 /* ARFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARFrame.swift; sourceTree = "<group>"; };
 		336CFA602A06309C0066EEE0 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
+		336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementButtonsView.swift; sourceTree = "<group>"; };
+		336CFA652A0635720066EEE0 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
+		336CFA672A0636190066EEE0 /* MovementButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +70,7 @@
 				336CFA462A056F920066EEE0 /* AppDelegate.swift */,
 				336CFA562A056FA70066EEE0 /* MoveCube */,
 				336CFA5A2A062EC10066EEE0 /* Views */,
+				336CFA642A06355E0066EEE0 /* Model */,
 				336CFA4A2A056F920066EEE0 /* Experience.rcproject */,
 				336CFA4C2A056F930066EEE0 /* Assets.xcassets */,
 				336CFA4E2A056F930066EEE0 /* Preview Content */,
@@ -93,8 +100,18 @@
 			children = (
 				336CFA5B2A062EDC0066EEE0 /* ARFrame.swift */,
 				336CFA602A06309C0066EEE0 /* ARViewContainer.swift */,
+				336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */,
+				336CFA672A0636190066EEE0 /* MovementButton.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		336CFA642A06355E0066EEE0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				336CFA652A0635720066EEE0 /* Direction.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,10 +192,13 @@
 			files = (
 				336CFA582A056FF80066EEE0 /* MoveCubeViewModel.swift in Sources */,
 				336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */,
+				336CFA682A0636190066EEE0 /* MovementButton.swift in Sources */,
 				336CFA472A056F920066EEE0 /* AppDelegate.swift in Sources */,
+				336CFA662A0635720066EEE0 /* Direction.swift in Sources */,
 				336CFA4B2A056F920066EEE0 /* Experience.rcproject in Sources */,
 				336CFA5C2A062EDC0066EEE0 /* ARFrame.swift in Sources */,
 				336CFA612A06309C0066EEE0 /* ARViewContainer.swift in Sources */,
+				336CFA632A0633EB0066EEE0 /* MovementButtonsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
