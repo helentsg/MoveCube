@@ -12,16 +12,13 @@ import FocusEntity
 class FocusARView: ARView {
     var focusEntity: FocusEntity?
     let networkManager = NetworkManager()
-    var potsAnchor = AnchorEntity(plane: .horizontal)
-    
+   
     required init(frame frameRect: CGRect){
         super.init(frame: frameRect)
         focusEntity = FocusEntity(on: self, focus: .classic)
         focusEntity?.setAutoUpdate(to: true)
         configure()
         enableTapGesture()
-        downloadPotModel()
-        self.scene.anchors.append(potsAnchor)
     }
     
     @objc required dynamic init?(coder decoder: NSCoder){
@@ -50,9 +47,8 @@ class FocusARView: ARView {
                                        alignment: .horizontal)
         if let result = results.first {
             let worldPosition = simd_make_float3(result.worldTransform.columns.3)
-            
-            potsAnchor.position = worldPosition
-            
+            let cube = createCube()
+            placeObject(cube, at: worldPosition)
         }
         
         if let entity = self.entity(at: tapLocation) as? ModelEntity, entity.name == "tvScreen" {
@@ -60,13 +56,26 @@ class FocusARView: ARView {
         }
     }
     
-    private func downloadPotModel() {
-        let potModel = ARModel(name: "pot",
-                               modelUrlString: "https://developer.apple.com/augmented-reality/quick-look/models/teapot/teapot.usdz",
-                               type: "usdz")
-       networkManager.download(model: potModel, for: potsAnchor)
+    private func createCube() -> ModelEntity {
+        let cube = MeshResource.generateBox(size: 0.2)
+        let material = SimpleMaterial(color: .red, isMetallic: true)
+        let cubeEntity = ModelEntity(mesh: cube, materials: [material])
+        return cubeEntity
     }
     
+    func placeObject(_ object: ModelEntity, at location: SIMD3<Float>) {
+        let objectAnchor = AnchorEntity(world: location)
+        objectAnchor.addChild(object)
+        scene.anchors.append(objectAnchor)
+    }
+    
+//    private func downloadPotModel() {
+//        let potModel = ARModel(name: "pot",
+//                               modelUrlString: "https://developer.apple.com/augmented-reality/quick-look/models/teapot/teapot.usdz",
+//                               type: "usdz")
+//       networkManager.download(model: potModel, for: potsAnchor)
+//    }
+//
 //    private func downloadCupModel() {
 //        let cupModel = ARModel(name: "cup",
 //                               modelUrlString: "https://developer.apple.com/augmented-reality/quick-look/models/cupandsaucer/cup_saucer_set.usdz",

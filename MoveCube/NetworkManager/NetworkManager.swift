@@ -13,7 +13,7 @@ class NetworkManager {
     
     @State var cancellable: AnyCancellable? = nil
     
-    func download(model: ARModel, for anchor: AnchorEntity) {
+    func download(model: ARModel, for arView: ARView) {
         let desktopURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.elenalucher.MoveCube")!
         let directory = desktopURL.appendingPathComponent("modelEntities")
         
@@ -36,7 +36,6 @@ class NetworkManager {
                             self?.cancellable?.cancel()
                         }, receiveValue: { model in
                             print(model.components.count)
-                            anchor.addChild(model)
                         })
                 }
             } catch {
