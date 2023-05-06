@@ -18,24 +18,54 @@ struct ARViewContainer: UIViewRepresentable {
     
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(frame: .zero)
-        let box = createBox()
-        box.generateCollisionShapes(recursive: true)
-        arView.installGestures([.translation], for: box)
-        let boxAnchor = AnchorEntity(world: SIMD3(x: 0, y: 0, z: 0))
-        boxAnchor.addChild(box)
-        arView.scene.anchors.append(boxAnchor)
         return arView
     }
     
     func updateUIView(_ uiView: ARView, context: Context) {
-      
+        downloadPotModel(for: uiView)
     }
     
-    func createBox() -> ModelEntity {
-        let box = MeshResource.generateBox(size: 0.2)
-        let material = SimpleMaterial(color: .red, isMetallic: true)
-        let boxEntity = ModelEntity(mesh: box, materials: [material])
-        return boxEntity
+    private func downloadPotModel(for uiView: ARView) {
+        let cupModel = ARModel(name: "cup",
+                               modelUrlString: "https://developer.apple.com/augmented-reality/quick-look/models/redchair/cup_saucer_set.usdz",
+                               type: "usdz")
+        let desktopURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.elenalucher.MoveCube")!
+        let directory = desktopURL.appendingPathComponent("modelEntities")
+        
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false, attributes: nil)
+        let fileOnDevice = directory.appendingPathComponent(cupModel.name).appendingPathExtension(cupModel.type)
+
+        Task {
+            do {
+                let localTempUrl = try await tempLocalUrl(for: cupModel.modelUrlString)
+                if FileManager.default.fileExists(atPath: fileOnDevice.path) {
+                    try! FileManager.default.removeItem(atPath: fileOnDevice.path)
+                }
+                try FileManager.default.moveItem(at: localTempUrl, to: fileOnDevice)
+                DispatchQueue.main.async {
+                    cancellable = Entity.loadModelAsync(contentsOf: fileOnDevice).sink(
+                        receiveCompletion: { completion in
+                            if case let .failure(error) = completion {
+                                print("Unable to load a model due to \(error)")
+                            }
+                            self.cancellable?.cancel()
+                        }, receiveValue: { model in
+                            print(model.components.count)
+                            let anchor = AnchorEntity(plane: .any)
+                            anchor.addChild(model)
+                            uiView.scene.anchors.append(anchor)
+                        })
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    private func tempLocalUrl(for remoteUrlString: String) async throws -> URL {
+        guard let url = URL(string: remoteUrlString) else { throw URLError(.badURL) }
+        let (dataTempFileUrl, _) = try await URLSession.shared.download(from: url)
+        return dataTempFileUrl
     }
 
 }
