@@ -47,7 +47,8 @@ class FocusARView: ARView {
     @IBAction func handleTapGesture(recognizer: UITapGestureRecognizer) {
         let tapLocation = recognizer.location(in: self)
         if let entity = self.entity(at: tapLocation) as? ModelEntity, entity.name == "cup" {
-            let material = SimpleMaterial(color: .blue, isMetallic: true)
+            let randomColor = [UIColor.yellow, UIColor.orange, UIColor.systemPink, UIColor.blue, UIColor.green, UIColor.purple, UIColor.red, UIColor.lightGray, UIColor.white].randomElement() ?? .green
+            let material = SimpleMaterial(color: randomColor, isMetallic: false)
             entity.model?.materials = [material]
         } else {
             let results = self.raycast(from: tapLocation,
