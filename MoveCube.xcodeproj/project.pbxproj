@@ -8,19 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		336CFA472A056F920066EEE0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA462A056F920066EEE0 /* AppDelegate.swift */; };
-		336CFA492A056F920066EEE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA482A056F920066EEE0 /* ContentView.swift */; };
+		336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA482A056F920066EEE0 /* MoveCubeView.swift */; };
 		336CFA4B2A056F920066EEE0 /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA4A2A056F920066EEE0 /* Experience.rcproject */; };
 		336CFA4D2A056F930066EEE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 336CFA4C2A056F930066EEE0 /* Assets.xcassets */; };
 		336CFA502A056F930066EEE0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 336CFA4F2A056F930066EEE0 /* Preview Assets.xcassets */; };
+		336CFA582A056FF80066EEE0 /* MoveCubeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA572A056FF80066EEE0 /* MoveCubeViewModel.swift */; };
+		336CFA5C2A062EDC0066EEE0 /* ARFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA5B2A062EDC0066EEE0 /* ARFrame.swift */; };
+		336CFA5F2A0630800066EEE0 /* FocusEntity in Frameworks */ = {isa = PBXBuildFile; productRef = 336CFA5E2A0630800066EEE0 /* FocusEntity */; };
+		336CFA612A06309C0066EEE0 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA602A06309C0066EEE0 /* ARViewContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		336CFA432A056F920066EEE0 /* MoveCube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoveCube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		336CFA462A056F920066EEE0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		336CFA482A056F920066EEE0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		336CFA482A056F920066EEE0 /* MoveCubeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCubeView.swift; sourceTree = "<group>"; };
 		336CFA4A2A056F920066EEE0 /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
 		336CFA4C2A056F930066EEE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		336CFA4F2A056F930066EEE0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		336CFA572A056FF80066EEE0 /* MoveCubeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCubeViewModel.swift; sourceTree = "<group>"; };
+		336CFA5B2A062EDC0066EEE0 /* ARFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARFrame.swift; sourceTree = "<group>"; };
+		336CFA602A06309C0066EEE0 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				336CFA5F2A0630800066EEE0 /* FocusEntity in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,7 +62,8 @@
 			isa = PBXGroup;
 			children = (
 				336CFA462A056F920066EEE0 /* AppDelegate.swift */,
-				336CFA482A056F920066EEE0 /* ContentView.swift */,
+				336CFA562A056FA70066EEE0 /* MoveCube */,
+				336CFA5A2A062EC10066EEE0 /* Views */,
 				336CFA4A2A056F920066EEE0 /* Experience.rcproject */,
 				336CFA4C2A056F930066EEE0 /* Assets.xcassets */,
 				336CFA4E2A056F930066EEE0 /* Preview Content */,
@@ -68,6 +77,24 @@
 				336CFA4F2A056F930066EEE0 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		336CFA562A056FA70066EEE0 /* MoveCube */ = {
+			isa = PBXGroup;
+			children = (
+				336CFA482A056F920066EEE0 /* MoveCubeView.swift */,
+				336CFA572A056FF80066EEE0 /* MoveCubeViewModel.swift */,
+			);
+			path = MoveCube;
+			sourceTree = "<group>";
+		};
+		336CFA5A2A062EC10066EEE0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				336CFA5B2A062EDC0066EEE0 /* ARFrame.swift */,
+				336CFA602A06309C0066EEE0 /* ARViewContainer.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,6 +113,9 @@
 			dependencies = (
 			);
 			name = MoveCube;
+			packageProductDependencies = (
+				336CFA5E2A0630800066EEE0 /* FocusEntity */,
+			);
 			productName = MoveCube;
 			productReference = 336CFA432A056F920066EEE0 /* MoveCube.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +144,9 @@
 				Base,
 			);
 			mainGroup = 336CFA3A2A056F920066EEE0;
+			packageReferences = (
+				336CFA5D2A0630800066EEE0 /* XCRemoteSwiftPackageReference "FocusEntity" */,
+			);
 			productRefGroup = 336CFA442A056F920066EEE0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -140,9 +173,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				336CFA492A056F920066EEE0 /* ContentView.swift in Sources */,
+				336CFA582A056FF80066EEE0 /* MoveCubeViewModel.swift in Sources */,
+				336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */,
 				336CFA472A056F920066EEE0 /* AppDelegate.swift in Sources */,
 				336CFA4B2A056F920066EEE0 /* Experience.rcproject in Sources */,
+				336CFA5C2A062EDC0066EEE0 /* ARFrame.swift in Sources */,
+				336CFA612A06309C0066EEE0 /* ARViewContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +383,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		336CFA5D2A0630800066EEE0 /* XCRemoteSwiftPackageReference "FocusEntity" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/maxxfrazer/FocusEntity";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		336CFA5E2A0630800066EEE0 /* FocusEntity */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 336CFA5D2A0630800066EEE0 /* XCRemoteSwiftPackageReference "FocusEntity" */;
+			productName = FocusEntity;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 336CFA3B2A056F920066EEE0 /* Project object */;
 }
