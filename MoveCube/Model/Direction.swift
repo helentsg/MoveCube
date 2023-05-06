@@ -17,13 +17,13 @@ extension Direction {
     var image: Image {
         switch self {
         case .left:
-            return Image(systemName: "arrow.left.circle")
+            return Image(systemName: "chevron.left")
         case .right:
-            return Image(systemName: "arrow.right.circle")
+            return Image(systemName: "chevron.right")
         case .forward:
-            return Image(systemName: "arrow.down.circle")
+            return Image(systemName: "chevron.down")
         case .back:
-            return Image(systemName: "arrow.up.circle")
+            return Image(systemName: "chevron.up")
         }
     }
     

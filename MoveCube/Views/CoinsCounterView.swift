@@ -13,7 +13,7 @@ struct CoinsCounterView: View {
     
     var body: some View {
         HStack(spacing: 4) {
-            AsyncImage(url: URL(string: "https://mix-ar.ru/content/ios/marker.jpg")) { phase in
+            AsyncImage(url: URL(string: "https://developer.apple.com/augmented-reality/quick-look/models/cupandsaucer/cupandsaucer_2x.jpg")) { phase in
                 if let image = phase.image {
                     image
                         .resizable()
