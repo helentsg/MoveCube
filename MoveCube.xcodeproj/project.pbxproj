@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3333EB002A064AD100282C8D /* CoinsCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EAFF2A064AD100282C8D /* CoinsCounterView.swift */; };
 		336CFA472A056F920066EEE0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA462A056F920066EEE0 /* AppDelegate.swift */; };
 		336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA482A056F920066EEE0 /* MoveCubeView.swift */; };
 		336CFA4B2A056F920066EEE0 /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA4A2A056F920066EEE0 /* Experience.rcproject */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3333EAFF2A064AD100282C8D /* CoinsCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinsCounterView.swift; sourceTree = "<group>"; };
 		336CFA432A056F920066EEE0 /* MoveCube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoveCube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		336CFA462A056F920066EEE0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		336CFA482A056F920066EEE0 /* MoveCubeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCubeView.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				336CFA602A06309C0066EEE0 /* ARViewContainer.swift */,
 				336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */,
 				336CFA672A0636190066EEE0 /* MovementButton.swift */,
+				3333EAFF2A064AD100282C8D /* CoinsCounterView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				336CFA4B2A056F920066EEE0 /* Experience.rcproject in Sources */,
 				336CFA5C2A062EDC0066EEE0 /* ARFrame.swift in Sources */,
 				336CFA612A06309C0066EEE0 /* ARViewContainer.swift in Sources */,
+				3333EB002A064AD100282C8D /* CoinsCounterView.swift in Sources */,
 				336CFA632A0633EB0066EEE0 /* MovementButtonsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

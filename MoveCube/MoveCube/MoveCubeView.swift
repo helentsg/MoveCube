@@ -16,7 +16,8 @@ struct MoveCubeView : View {
         ZStack(alignment: .bottom) {
             ARViewContainer(coinsCounter: $viewModel.coinsCounter).edgesIgnoringSafeArea(.all)
             if viewModel.cubsCounter > 0 {
-                MovementButtonsView(selectedDirection: $viewModel.selectedDirection)
+                MovementButtonsView(coinsCounter: $viewModel.coinsCounter,
+                                    selectedDirection: $viewModel.selectedDirection)
             }
         }
     }

@@ -8,24 +8,36 @@
 import SwiftUI
 
 struct MovementButtonsView: View {
+    @Binding var coinsCounter: Int
     @Binding var selectedDirection: Direction?
     
     var body: some View {
-        VStack {
-            MovementButton(selectedDirection: $selectedDirection,
-                           direction: .back)
-            Spacer()
-            HStack() {
+        ZStack {
+            VStack {
                 MovementButton(selectedDirection: $selectedDirection,
-                               direction: .left)
+                                                   direction: .back)
+                
+                Spacer()
+                HStack() {
+                    MovementButton(selectedDirection: $selectedDirection,
+                                   direction: .left)
+                    Spacer()
+                    MovementButton(selectedDirection: $selectedDirection,
+                                   direction: .right)
+                }
                 Spacer()
                 MovementButton(selectedDirection: $selectedDirection,
-                               direction: .left)
+                               direction: .forward)
             }
-            Spacer()
-            MovementButton(selectedDirection: $selectedDirection,
-                           direction: .forward)
+            HStack() {
+                Spacer()
+                VStack {
+                    CoinsCounterView(coinsCounter: $coinsCounter)
+                    Spacer()
+                }
+            }
         }
+        
     }
     
 }
