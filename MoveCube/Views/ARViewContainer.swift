@@ -18,7 +18,11 @@ struct ARViewContainer: UIViewRepresentable {
     
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(frame: .zero)
-        let boxAnchor = try! Experience.loadBox()
+        let box = createBox()
+        box.generateCollisionShapes(recursive: true)
+        arView.installGestures([.translation], for: box)
+        let boxAnchor = AnchorEntity(world: SIMD3(x: 0, y: 0, z: 0))
+        boxAnchor.addChild(box)
         arView.scene.anchors.append(boxAnchor)
         return arView
     }
@@ -27,12 +31,13 @@ struct ARViewContainer: UIViewRepresentable {
       
     }
     
-    private func tempLocalUrl(for remoteUrlString: String) async throws -> URL {
-        guard let url = URL(string: remoteUrlString) else { throw URLError(.badURL) }
-        let (dataTempFileUrl, _) = try await URLSession.shared.download(from: url)
-        return dataTempFileUrl
+    func createBox() -> ModelEntity {
+        let box = MeshResource.generateBox(size: 0.2)
+        let material = SimpleMaterial(color: .red, isMetallic: true)
+        let boxEntity = ModelEntity(mesh: box, materials: [material])
+        return boxEntity
     }
-    
+
 }
 
 extension ARView {
