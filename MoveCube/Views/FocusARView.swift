@@ -36,12 +36,6 @@ class FocusARView: ARView, EventSource {
     private var randomColor : UIColor {
         [UIColor.yellow, UIColor.orange, UIColor.systemPink, UIColor.blue, UIColor.green, UIColor.purple, UIColor.red, UIColor.lightGray, UIColor.white].randomElement() ?? .green
     }
-    private var randomX : Float {
-        [-0.8, -0.6, -0.4, -0.2, 0.2, 0.2, 0.4, 0.6, 0.8].randomElement() ?? 0.2
-    }
-    private var randomZ : Float {
-        [-0.8, -0.6, -0.4, -0.2, 0.2, 0.2, 0.4, 0.6, 0.8].randomElement() ?? 0.2
-    }
     var collisionSubs: [Cancellable] = []
     let cupGroup = CollisionGroup(rawValue: 1 << 0)
     let coinsGroup = CollisionGroup(rawValue: 1 << 1)
@@ -97,8 +91,8 @@ class FocusARView: ARView, EventSource {
                                        alignment: .horizontal)
             if let result = results.first {
                 let worldPosition = simd_make_float3(result.worldTransform.columns.3)
-                if let potEntity {
-                    placeObject(potEntity, at: worldPosition, type: .pot)
+                if let copy = potEntity?.clone(recursive: true) as? ModelEntity {
+                    placeObject(copy, at: worldPosition, type: .pot)
                     newPotsCounter += 1
                     potsCounter.wrappedValue = newPotsCounter
                     if newPotsCounter == 1 {
@@ -131,11 +125,10 @@ class FocusARView: ARView, EventSource {
     func placeObject(_ object: ModelEntity,
                      at location: SIMD3<Float>,
                      type: ModelType) {
-        let copy = object.clone(recursive: true)
-        copy.generateCollisionShapes(recursive: true)
-        copy.physicsBody = .init()
-        copy.physicsBody?.massProperties.mass = 5
-        copy.physicsBody?.mode = .kinematic
+        object.generateCollisionShapes(recursive: true)
+        object.physicsBody = .init()
+        object.physicsBody?.massProperties.mass = 5
+        object.physicsBody?.mode = .kinematic
     //    copy.collision =  CollisionComponent(
 //            shapes: [ShapeResource.generateSphere(radius: 0.2)],
 //            mode: .trigger,
@@ -147,8 +140,8 @@ class FocusARView: ARView, EventSource {
         object.collision?.filter = cupFilter
         let objectAnchor = AnchorEntity(world: location)
         objectAnchor.name = type.name
-        objectAnchor.addChild(copy)
-        installGestures(.all, for: copy)
+        objectAnchor.addChild(object)
+        installGestures(.all, for: object)
         scene.anchors.append(objectAnchor)
     }
     
@@ -169,7 +162,10 @@ class FocusARView: ARView, EventSource {
     }
     
     func removeCups() {
-        
+        newCupsCounter = 0
+        cupsCounter.wrappedValue = newCupsCounter
+        let cupAnchors = scene.anchors.filter { $0.name == ModelType.cup.name }
+        cupAnchors.forEach { $0.removeFromParent() }
     }
     
     func movePots(by motion: Binding<Motion?>) {
@@ -195,16 +191,21 @@ class FocusARView: ARView, EventSource {
     }
     
     func placeCups(in location: SIMD3<Float>) {
-        guard let cupModel = cupEntity else {
-            return
-        }
         for _ in 0 ..< 3 {
-            cupsCounter.wrappedValue += 1
-            let location = SIMD3(x: location.x + randomX,
-                                 y: location.y + randomZ,
-                                 z: location.z)
-            placeObject(cupModel, at: location, type: .cup)
+            guard let cupModel = cupEntity?.clone(recursive: true) as? ModelEntity else {
+                return
+            }
+            newCupsCounter += 1
+            cupsCounter.wrappedValue = newCupsCounter
+            let cupLocation = SIMD3(x: location.x + randomFloat(),
+                                    y: location.y,
+                                    z: location.z + randomFloat())
+            placeObject(cupModel, at: cupLocation, type: .cup)
         }
+    }
+    
+    func randomFloat() -> Float {
+        [-0.5, -0.4, -0.3, -0.2, 0.2, 0.3, 0.4, 0.5].randomElement() ?? 0.2
     }
     
 }
