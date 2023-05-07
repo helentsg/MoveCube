@@ -37,9 +37,7 @@ class FocusARView: ARView, EventSource {
         [UIColor.yellow, UIColor.orange, UIColor.systemPink, UIColor.blue, UIColor.green, UIColor.purple, UIColor.red, UIColor.lightGray, UIColor.white].randomElement() ?? .green
     }
     var collisionSubs: [Cancellable] = []
-    let cupGroup = CollisionGroup(rawValue: 1 << 0)
-    let coinsGroup = CollisionGroup(rawValue: 1 << 1)
-    
+    let collisionGroup = CollisionGroup(rawValue: 1 << 0)
     
     convenience init(potsCounter: Binding<Int>,
                      cupsCounter: Binding<Int>,
@@ -133,20 +131,33 @@ class FocusARView: ARView, EventSource {
         object.physicsBody = .init()
         object.physicsBody?.massProperties.mass = 5
         object.physicsBody?.mode = .kinematic
-    //    copy.collision =  CollisionComponent(
-//            shapes: [ShapeResource.generateSphere(radius: 0.2)],
-//            mode: .trigger,
-//            filter: .sensor
-//        )
-        let cupMask = CollisionGroup.all.subtracting(cupGroup)
-        let cupFilter = CollisionFilter(group: cupGroup,
-                                                  mask: cupMask)
-        object.collision?.filter = cupFilter
+        object.collision = collision(for: type)
+        let mask = CollisionGroup.all.subtracting(collisionGroup)
+        let filter = CollisionFilter(group: collisionGroup,
+                                                  mask: mask)
+        object.collision?.filter = filter
         let objectAnchor = AnchorEntity(world: location)
         objectAnchor.name = type.name
         objectAnchor.addChild(object)
         installGestures(.all, for: object)
         scene.anchors.append(objectAnchor)
+    }
+    
+    func collision(for type: ModelType) -> CollisionComponent {
+        switch type {
+        case .pot:
+            return CollisionComponent(
+                shapes: [ShapeResource.generateCapsule(height: 20, radius: 10)],
+                mode: .trigger,
+                filter: .sensor
+            )
+        case .cup:
+            return CollisionComponent(
+                shapes: [ShapeResource.generateCapsule(height: 30, radius: 20)],
+                mode: .trigger,
+                filter: .sensor
+            )
+        }
     }
     
     func addCollisions() {
