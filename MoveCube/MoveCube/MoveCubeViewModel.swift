@@ -11,7 +11,7 @@ class MoveCubeViewModel: ObservableObject {
 
     @Published var coinsCounter: Int = 0
     @Published var cupsCounter: Int = 0
-    @Published var selectedDirection: Direction?
+    @Published var motion: Motion?
     
     init() {
     }

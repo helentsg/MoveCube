@@ -15,9 +15,10 @@ struct ARViewContainer: UIViewRepresentable {
     @State var cancellable: AnyCancellable? = nil
     @Binding var coinsCounter: Int
     @Binding var cupsCounter: Int
+    @Binding var motion: Motion?
     
     func makeUIView(context: Context) -> ARView {
-        let arView = FocusARView(cupsCounter: $cupsCounter)
+        let arView = FocusARView(cupsCounter: $cupsCounter, motion: $motion)
         downloadCupModel(for: arView)
         downloadCoinModel(for: arView)
         return arView
@@ -100,23 +101,6 @@ struct ARViewContainer: UIViewRepresentable {
         anchorEntity.addChild(object.clone(recursive: true))
         arView.installGestures(.all, for: object)
         arView.scene.addAnchor(anchorEntity)
-    }
-    
-    func moveCups(to direction: Direction, with duration: ) {
-        var transform = Transform()
-        switch direction {
-        case .left:
-            transform.translation.x = -0.5
-        case .right:
-            transform.translation.x = 0.5
-        case .forward:
-            transform.translation.z = -0.5
-        case .back:
-            transform.translation.z = 0.5
-        }
-        DispatchQueue.main.async {
-            model.move(to: transform, relativeTo: nil, duration: 2.0)
-        }
     }
     
 }

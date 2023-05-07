@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MovementButton: View {
     
-    @Binding var selectedDirection: Direction?
+    @Binding var motion: Motion?
     var direction: Direction
     
     var body: some View {
         Button {
-            selectedDirection = direction
+            motion?.direction = direction
         } label: {
             direction.image
                 .frame(width: 60, height: 60)

@@ -21,13 +21,23 @@ class FocusARView: ARView, EventSource {
     } set: { newValue in
         self.newCupsCounter = newValue
     }
+    var newMotion: Motion?
+    lazy var motion = Binding {
+        return self.newMotion
+    } set: { newValue in
+        self.newMotion = newValue
+    }
+    
     var collisionSubs: [Cancellable] = []
     let cupGroup = CollisionGroup(rawValue: 1 << 0)
     let coinsGroup = CollisionGroup(rawValue: 1 << 1)
     
-    convenience init(cupsCounter: Binding<Int>){
+    
+    convenience init(cupsCounter: Binding<Int>,
+                     motion: Binding<Motion?>){
         self.init(frame: .zero)
         self.cupsCounter = cupsCounter
+        self.motion = motion
         focusEntity = FocusEntity(on: self, focus: .classic)
         focusEntity?.setAutoUpdate(to: true)
         configure()
@@ -168,6 +178,27 @@ class FocusARView: ARView, EventSource {
         scene.anchors.append(objectAnchor)
     }
     
-    
+    func moveCups(by motion: Binding<Motion?>) {
+        var transform = Transform()
+        guard let motion = motion.wrappedValue else { return }
+        switch motion.direction {
+        case .left:
+            transform.translation.x = -0.5
+        case .right:
+            transform.translation.x = 0.5
+        case .forward:
+            transform.translation.z = -0.5
+        case .back:
+            transform.translation.z = 0.5
+        }
+        let cupAnchors = scene.anchors.filter({ $0.name == "cup" })
+        let cups = cupAnchors.compactMap { $0.children[0] as? ModelEntity }
+        cups.forEach { cupModel in
+            DispatchQueue.main.async {
+                cupModel.move(to: transform, relativeTo: nil, duration: motion.duration)
+            }
+        }
+        self.motion.wrappedValue = nil
+    }
     
 }
