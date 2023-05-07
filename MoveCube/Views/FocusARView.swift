@@ -14,13 +14,24 @@ import FocusEntity
 class FocusARView: ARView {
     var focusEntity: FocusEntity?
     var cupEntity: ModelEntity?
+    var newCupsCounter: Int = 0
+    lazy var cupsCounter = Binding {
+        return self.newCupsCounter
+    } set: { newValue in
+        self.newCupsCounter = newValue
+    }
     
-    required init(frame frameRect: CGRect){
-        super.init(frame: frameRect)
+    convenience init(cupsCounter: Binding<Int>){
+        self.init(frame: .zero)
+        self.cupsCounter = cupsCounter
         focusEntity = FocusEntity(on: self, focus: .classic)
         focusEntity?.setAutoUpdate(to: true)
         configure()
         enableTapGesture()
+    }
+    
+    required init(frame frameRect: CGRect){
+        super.init(frame: frameRect)
     }
     
     @objc required dynamic init?(coder decoder: NSCoder){
@@ -58,6 +69,8 @@ class FocusARView: ARView {
                 let worldPosition = simd_make_float3(result.worldTransform.columns.3)
                 if let copy = cupEntity?.clone(recursive: true) as? ModelEntity{
                     placeObject(copy, at: worldPosition)
+                    newCupsCounter += 1
+                    cupsCounter.wrappedValue = newCupsCounter
                 }
             }
         }
@@ -70,6 +83,8 @@ class FocusARView: ARView {
             if let anchor = entity.anchor,
                anchor.name == "cup" {
                 anchor.removeFromParent()
+                newCupsCounter -= 1
+                cupsCounter.wrappedValue = newCupsCounter
             }
         } else {
             
@@ -78,6 +93,10 @@ class FocusARView: ARView {
     
     func placeObject(_ object: ModelEntity, at location: SIMD3<Float>) {
         object.generateCollisionShapes(recursive: true)
+        object.physicsBody = .init()
+        object.physicsBody?.massProperties.mass = 5
+        object.physicsBody?.mode = .kinematic
+    //    object.collision = CollisionComponent(shapes: [ShapeResource.generateSphere(radius: 0.2)])
         let objectAnchor = AnchorEntity(world: location)
         objectAnchor.name = "cup"
         objectAnchor.addChild(object)

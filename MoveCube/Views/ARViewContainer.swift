@@ -14,9 +14,10 @@ struct ARViewContainer: UIViewRepresentable {
     
     @State var cancellable: AnyCancellable? = nil
     @Binding var coinsCounter: Int
+    @Binding var cupsCounter: Int
     
     func makeUIView(context: Context) -> ARView {
-        let arView = FocusARView(frame: .zero)
+        let arView = FocusARView(cupsCounter: $cupsCounter)
         downloadCupModel(for: arView)
         return arView
     }
