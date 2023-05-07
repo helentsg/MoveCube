@@ -21,6 +21,12 @@ class FocusARView: ARView, EventSource {
     } set: { newValue in
         self.newCupsCounter = newValue
     }
+    var newCoinsCounter: Int = 0
+    lazy var coinsCounter = Binding {
+        return self.newCoinsCounter
+    } set: { newValue in
+        self.newCoinsCounter = newValue
+    }
     var newMotion: Motion?
     lazy var motion = Binding {
         return self.newMotion
@@ -34,9 +40,11 @@ class FocusARView: ARView, EventSource {
     
     
     convenience init(cupsCounter: Binding<Int>,
+                     coinsCounter: Binding<Int>,
                      motion: Binding<Motion?>){
         self.init(frame: .zero)
         self.cupsCounter = cupsCounter
+        self.coinsCounter = coinsCounter
         self.motion = motion
         focusEntity = FocusEntity(on: self, focus: .classic)
         focusEntity?.setAutoUpdate(to: true)
@@ -89,7 +97,7 @@ class FocusARView: ARView, EventSource {
                 }
             }
             if newCupsCounter == 1 {
-                placeFiveCoins()
+                placeCoins()
             }
         }
         
@@ -200,5 +208,28 @@ class FocusARView: ARView, EventSource {
         }
         self.motion.wrappedValue = nil
     }
+    
+    func placeCoins() {
+        guard let coinModel = coinEntity else {
+            return
+        }
+        for _ in 0 ..< 3 {
+            newCoinsCounter += 1
+            placeCoin(coinModel)
+        }
+    }
+    
+    func placeCoin(_ object: ModelEntity) {
+        object.generateCollisionShapes(recursive: true)
+        object.physicsBody = .init()
+        object.physicsBody?.massProperties.mass = 5
+        object.physicsBody?.mode = .kinematic
+        let anchorEntity = AnchorEntity(plane: .horizontal)
+        anchorEntity.name = "coin"
+        anchorEntity.addChild(object.clone(recursive: true))
+        installGestures(.all, for: object)
+        scene.addAnchor(anchorEntity)
+    }
+    
     
 }

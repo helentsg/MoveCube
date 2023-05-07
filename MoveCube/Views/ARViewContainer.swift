@@ -13,12 +13,15 @@ import AVFoundation
 struct ARViewContainer: UIViewRepresentable {
     
     @State var cancellable: AnyCancellable? = nil
+    @State var coinsCancellable: AnyCancellable? = nil
     @Binding var coinsCounter: Int
     @Binding var cupsCounter: Int
     @Binding var motion: Motion?
     
     func makeUIView(context: Context) -> ARView {
-        let arView = FocusARView(cupsCounter: $cupsCounter, motion: $motion)
+        let arView = FocusARView(cupsCounter: $cupsCounter,
+                                 coinsCounter: $coinsCounter,
+                                 motion: $motion)
         downloadCupModel(for: arView)
         downloadCoinModel(for: arView)
         return arView
@@ -74,33 +77,18 @@ struct ARViewContainer: UIViewRepresentable {
     
     private func downloadCoinModel(for arView: FocusARView) {
         DispatchQueue.main.async {
-            self.cancellable = Entity.loadModelAsync(named: "coin.usdz").sink(
+            self.coinsCancellable = Entity.loadModelAsync(named: "coin.usdz").sink(
                 receiveCompletion: { completion in
                     if case let .failure(error) = completion {
                         print("Unable to load a model due to \(error)")
                     }
-                    self.cancellable?.cancel()
+                    self.coinsCancellable?.cancel()
                 }, receiveValue: { model in
                     model.name = "coin"
+                    coinsCancellable?.cancel()
                     arView.coinEntity = model
-                    for _ in 0 ..< 3 {
-                        $coinsCounter.wrappedValue += 1
-                        placeCoin(model, for: arView)
-                    }
                 })
         }
-    }
-    
-    func placeCoin(_ object: ModelEntity, for arView: FocusARView) {
-        object.generateCollisionShapes(recursive: true)
-        object.physicsBody = .init()
-        object.physicsBody?.massProperties.mass = 5
-        object.physicsBody?.mode = .kinematic
-        let anchorEntity = AnchorEntity(plane: .horizontal)
-        anchorEntity.name = "coin"
-        anchorEntity.addChild(object.clone(recursive: true))
-        arView.installGestures(.all, for: object)
-        arView.scene.addAnchor(anchorEntity)
     }
     
 }
