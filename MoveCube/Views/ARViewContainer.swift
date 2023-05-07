@@ -102,4 +102,21 @@ struct ARViewContainer: UIViewRepresentable {
         arView.scene.addAnchor(anchorEntity)
     }
     
+    func moveCups(to direction: Direction, with duration: ) {
+        var transform = Transform()
+        switch direction {
+        case .left:
+            transform.translation.x = -0.5
+        case .right:
+            transform.translation.x = 0.5
+        case .forward:
+            transform.translation.z = -0.5
+        case .back:
+            transform.translation.z = 0.5
+        }
+        DispatchQueue.main.async {
+            model.move(to: transform, relativeTo: nil, duration: 2.0)
+        }
+    }
+    
 }
