@@ -11,15 +11,19 @@ import ARKit
 import RealityKit
 import FocusEntity
 
-class FocusARView: ARView {
+class FocusARView: ARView, EventSource {
     var focusEntity: FocusEntity?
     var cupEntity: ModelEntity?
+    var coinEntity: ModelEntity?
     var newCupsCounter: Int = 0
     lazy var cupsCounter = Binding {
         return self.newCupsCounter
     } set: { newValue in
         self.newCupsCounter = newValue
     }
+    var collisionSubs: [Cancellable] = []
+    let cupGroup = CollisionGroup(rawValue: 1 << 0)
+    let coinsGroup = CollisionGroup(rawValue: 1 << 1)
     
     convenience init(cupsCounter: Binding<Int>){
         self.init(frame: .zero)
@@ -27,6 +31,7 @@ class FocusARView: ARView {
         focusEntity = FocusEntity(on: self, focus: .classic)
         focusEntity?.setAutoUpdate(to: true)
         configure()
+        addCollisions()
         enableTapGesture()
     }
     
@@ -73,6 +78,9 @@ class FocusARView: ARView {
                     cupsCounter.wrappedValue = newCupsCounter
                 }
             }
+            if newCupsCounter == 1 {
+                placeFiveCoins()
+            }
         }
         
     }
@@ -85,6 +93,9 @@ class FocusARView: ARView {
                 anchor.removeFromParent()
                 newCupsCounter -= 1
                 cupsCounter.wrappedValue = newCupsCounter
+                if newCupsCounter == 0 {
+                    removeCoins()
+                }
             }
         } else {
             
@@ -96,9 +107,62 @@ class FocusARView: ARView {
         object.physicsBody = .init()
         object.physicsBody?.massProperties.mass = 5
         object.physicsBody?.mode = .kinematic
-    //    object.collision = CollisionComponent(shapes: [ShapeResource.generateSphere(radius: 0.2)])
+    //    object.collision =  CollisionComponent(
+//            shapes: [ShapeResource.generateSphere(radius: 0.2)],
+//            mode: .trigger,
+//            filter: .sensor
+//        )
+        let cupMask = CollisionGroup.all.subtracting(cupGroup)
+        let cupFilter = CollisionFilter(group: cupGroup,
+                                                  mask: cupMask)
+        object.collision?.filter = cupFilter
         let objectAnchor = AnchorEntity(world: location)
         objectAnchor.name = "cup"
+        objectAnchor.addChild(object)
+        installGestures(.all, for: object)
+        scene.anchors.append(objectAnchor)
+    }
+    
+    func addCollisions() {
+      collisionSubs.append(scene.subscribe(to: CollisionEvents.Began.self, on: self) { event in
+          guard let entity = event.entityA as? ModelEntity else {
+          return
+        }
+
+          entity.model?.materials = [SimpleMaterial(color: .red, isMetallic: false)]
+      })
+      collisionSubs.append(scene.subscribe(to: CollisionEvents.Ended.self, on: self) { event in
+          guard let entity = event.entityA as? ModelEntity else {
+          return
+        }
+          entity.model?.materials = [SimpleMaterial(color: .yellow, isMetallic: false)]
+      })
+    }
+    
+    func placeFiveCoins() {
+        
+    }
+    
+    func removeCoins() {
+        
+    }
+    
+    func placeCoin(_ object: ModelEntity, at location: SIMD3<Float>) {
+        object.generateCollisionShapes(recursive: true)
+        object.physicsBody = .init()
+        object.physicsBody?.massProperties.mass = 5
+        object.physicsBody?.mode = .kinematic
+    //    object.collision =  CollisionComponent(
+//            shapes: [ShapeResource.generateSphere(radius: 0.2)],
+//            mode: .trigger,
+//            filter: .sensor
+//        )
+        let cupMask = CollisionGroup.all.subtracting(cupGroup)
+        let cupFilter = CollisionFilter(group: cupGroup,
+                                                  mask: cupMask)
+        object.collision?.filter = cupFilter
+        let objectAnchor = AnchorEntity(world: location)
+        objectAnchor.name = "coin"
         objectAnchor.addChild(object)
         installGestures(.all, for: object)
         scene.anchors.append(objectAnchor)

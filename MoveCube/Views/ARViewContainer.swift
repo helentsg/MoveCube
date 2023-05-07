@@ -19,6 +19,7 @@ struct ARViewContainer: UIViewRepresentable {
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(cupsCounter: $cupsCounter)
         downloadCupModel(for: arView)
+        downloadCoinModel(for: arView)
         return arView
     }
     
@@ -68,6 +69,37 @@ struct ARViewContainer: UIViewRepresentable {
         guard let url = URL(string: remoteUrlString) else { throw URLError(.badURL) }
         let (dataTempFileUrl, _) = try await URLSession.shared.download(from: url)
         return dataTempFileUrl
+    }
+    
+    private func downloadCoinModel(for arView: FocusARView) {
+        DispatchQueue.main.async {
+            self.cancellable = Entity.loadModelAsync(named: "coin.usdz").sink(
+                receiveCompletion: { completion in
+                    if case let .failure(error) = completion {
+                        print("Unable to load a model due to \(error)")
+                    }
+                    self.cancellable?.cancel()
+                }, receiveValue: { model in
+                    model.name = "coin"
+                    arView.coinEntity = model
+                    for _ in 0 ..< 3 {
+                        $coinsCounter.wrappedValue += 1
+                        placeCoin(model, for: arView)
+                    }
+                })
+        }
+    }
+    
+    func placeCoin(_ object: ModelEntity, for arView: FocusARView) {
+        object.generateCollisionShapes(recursive: true)
+        object.physicsBody = .init()
+        object.physicsBody?.massProperties.mass = 5
+        object.physicsBody?.mode = .kinematic
+        let anchorEntity = AnchorEntity(plane: .horizontal)
+        anchorEntity.name = "coin"
+        anchorEntity.addChild(object.clone(recursive: true))
+        arView.installGestures(.all, for: object)
+        arView.scene.addAnchor(anchorEntity)
     }
     
 }
