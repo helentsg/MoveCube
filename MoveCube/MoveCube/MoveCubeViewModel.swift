@@ -9,7 +9,7 @@ import SwiftUI
 
 class MoveCubeViewModel: ObservableObject {
 
-    @Published var coinsCounter: Int = 0
+    @Published var potsCounter: Int = 0
     @Published var cupsCounter: Int = 0
     @Published var motion: Motion?
     

@@ -19,9 +19,9 @@ struct MovementButton: View {
             direction.image
                 .frame(width: 60, height: 60)
                 .font(.title)
-                .background(Color.white.opacity(0.75))
+                .background(Color.white.opacity(0.5))
                 .cornerRadius(30)
-                .padding(20)
+                .padding(16)
         }
     }
     

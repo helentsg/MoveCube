@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MovementButtonsView: View {
-    @Binding var coinsCounter: Int
+    @Binding var cupsCounter: Int
     @Binding var motion: Motion?
     
     var body: some View {
@@ -31,7 +31,7 @@ struct MovementButtonsView: View {
             HStack() {
                 Spacer()
                 VStack {
-                    CoinsCounterView(coinsCounter: $coinsCounter)
+                    CupsCounterView(cupsCounter: $cupsCounter)
                     Spacer()
                 }
             }

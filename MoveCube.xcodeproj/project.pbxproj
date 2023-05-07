@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3333EB002A064AD100282C8D /* CoinsCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EAFF2A064AD100282C8D /* CoinsCounterView.swift */; };
+		3333EB002A064AD100282C8D /* CupsCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EAFF2A064AD100282C8D /* CupsCounterView.swift */; };
 		3333EB292A0674AF00282C8D /* ARModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EB282A0674AF00282C8D /* ARModel.swift */; };
 		3333EB302A07D34400282C8D /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EB2F2A07D34400282C8D /* Motion.swift */; };
-		3333EB322A07E69700282C8D /* coin.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 3333EB312A07E69700282C8D /* coin.usdz */; };
+		3333EB342A07F44900282C8D /* ModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EB332A07F44900282C8D /* ModelType.swift */; };
 		336CFA472A056F920066EEE0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA462A056F920066EEE0 /* AppDelegate.swift */; };
 		336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA482A056F920066EEE0 /* MoveCubeView.swift */; };
 		336CFA4D2A056F930066EEE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 336CFA4C2A056F930066EEE0 /* Assets.xcassets */; };
@@ -25,11 +25,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3333EAFF2A064AD100282C8D /* CoinsCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinsCounterView.swift; sourceTree = "<group>"; };
+		3333EAFF2A064AD100282C8D /* CupsCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CupsCounterView.swift; sourceTree = "<group>"; };
 		3333EB272A0672A700282C8D /* MoveCube.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MoveCube.entitlements; sourceTree = "<group>"; };
 		3333EB282A0674AF00282C8D /* ARModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARModel.swift; sourceTree = "<group>"; };
 		3333EB2F2A07D34400282C8D /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
-		3333EB312A07E69700282C8D /* coin.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = coin.usdz; sourceTree = "<group>"; };
+		3333EB332A07F44900282C8D /* ModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelType.swift; sourceTree = "<group>"; };
 		336CFA432A056F920066EEE0 /* MoveCube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoveCube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		336CFA462A056F920066EEE0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		336CFA482A056F920066EEE0 /* MoveCubeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCubeView.swift; sourceTree = "<group>"; };
@@ -55,14 +55,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3333EB222A0664C000282C8D /* ARModels */ = {
-			isa = PBXGroup;
-			children = (
-				3333EB312A07E69700282C8D /* coin.usdz */,
-			);
-			path = ARModels;
-			sourceTree = "<group>";
-		};
 		336CFA3A2A056F920066EEE0 = {
 			isa = PBXGroup;
 			children = (
@@ -86,7 +78,6 @@
 				336CFA462A056F920066EEE0 /* AppDelegate.swift */,
 				336CFA562A056FA70066EEE0 /* MoveCube */,
 				336CFA5A2A062EC10066EEE0 /* Views */,
-				3333EB222A0664C000282C8D /* ARModels */,
 				336CFA642A06355E0066EEE0 /* Model */,
 				336CFA4C2A056F930066EEE0 /* Assets.xcassets */,
 				336CFA4E2A056F930066EEE0 /* Preview Content */,
@@ -118,7 +109,7 @@
 				336CFA602A06309C0066EEE0 /* ARViewContainer.swift */,
 				336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */,
 				336CFA672A0636190066EEE0 /* MovementButton.swift */,
-				3333EAFF2A064AD100282C8D /* CoinsCounterView.swift */,
+				3333EAFF2A064AD100282C8D /* CupsCounterView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -129,6 +120,7 @@
 				336CFA652A0635720066EEE0 /* Direction.swift */,
 				3333EB282A0674AF00282C8D /* ARModel.swift */,
 				3333EB2F2A07D34400282C8D /* Motion.swift */,
+				3333EB332A07F44900282C8D /* ModelType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -198,7 +190,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				336CFA502A056F930066EEE0 /* Preview Assets.xcassets in Resources */,
-				3333EB322A07E69700282C8D /* coin.usdz in Resources */,
 				336CFA4D2A056F930066EEE0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,6 +202,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3333EB302A07D34400282C8D /* Motion.swift in Sources */,
+				3333EB342A07F44900282C8D /* ModelType.swift in Sources */,
 				336CFA582A056FF80066EEE0 /* MoveCubeViewModel.swift in Sources */,
 				336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */,
 				336CFA682A0636190066EEE0 /* MovementButton.swift in Sources */,
@@ -219,7 +211,7 @@
 				336CFA662A0635720066EEE0 /* Direction.swift in Sources */,
 				336CFA5C2A062EDC0066EEE0 /* FocusARView.swift in Sources */,
 				336CFA612A06309C0066EEE0 /* ARViewContainer.swift in Sources */,
-				3333EB002A064AD100282C8D /* CoinsCounterView.swift in Sources */,
+				3333EB002A064AD100282C8D /* CupsCounterView.swift in Sources */,
 				336CFA632A0633EB0066EEE0 /* MovementButtonsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

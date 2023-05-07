@@ -14,18 +14,18 @@ import FocusEntity
 class FocusARView: ARView, EventSource {
     var focusEntity: FocusEntity?
     var cupEntity: ModelEntity?
-    var coinEntity: ModelEntity?
+    var potEntity: ModelEntity?
     var newCupsCounter: Int = 0
     lazy var cupsCounter = Binding {
         return self.newCupsCounter
     } set: { newValue in
         self.newCupsCounter = newValue
     }
-    var newCoinsCounter: Int = 0
-    lazy var coinsCounter = Binding {
-        return self.newCoinsCounter
+    var newPotsCounter: Int = 0
+    lazy var potsCounter = Binding {
+        return self.newPotsCounter
     } set: { newValue in
-        self.newCoinsCounter = newValue
+        self.newPotsCounter = newValue
     }
     var newMotion: Motion?
     lazy var motion = Binding {
@@ -33,18 +33,20 @@ class FocusARView: ARView, EventSource {
     } set: { newValue in
         self.newMotion = newValue
     }
-    
+    private var randomColor : UIColor {
+        [UIColor.yellow, UIColor.orange, UIColor.systemPink, UIColor.blue, UIColor.green, UIColor.purple, UIColor.red, UIColor.lightGray, UIColor.white].randomElement() ?? .green
+    }
     var collisionSubs: [Cancellable] = []
     let cupGroup = CollisionGroup(rawValue: 1 << 0)
     let coinsGroup = CollisionGroup(rawValue: 1 << 1)
     
     
-    convenience init(cupsCounter: Binding<Int>,
-                     coinsCounter: Binding<Int>,
+    convenience init(potsCounter: Binding<Int>,
+                     cupsCounter: Binding<Int>,
                      motion: Binding<Motion?>){
         self.init(frame: .zero)
+        self.potsCounter = potsCounter
         self.cupsCounter = cupsCounter
-        self.coinsCounter = coinsCounter
         self.motion = motion
         focusEntity = FocusEntity(on: self, focus: .classic)
         focusEntity?.setAutoUpdate(to: true)
@@ -80,8 +82,7 @@ class FocusARView: ARView, EventSource {
     
     @IBAction func handleTapGesture(recognizer: UITapGestureRecognizer) {
         let tapLocation = recognizer.location(in: self)
-        if let entity = self.entity(at: tapLocation) as? ModelEntity, entity.name == "cup" {
-            let randomColor = [UIColor.yellow, UIColor.orange, UIColor.systemPink, UIColor.blue, UIColor.green, UIColor.purple, UIColor.red, UIColor.lightGray, UIColor.white].randomElement() ?? .green
+        if let entity = self.entity(at: tapLocation) as? ModelEntity, entity.name == ModelType.pot.name {
             let material = SimpleMaterial(color: randomColor, isMetallic: false)
             entity.model?.materials = [material]
         } else {
@@ -90,14 +91,14 @@ class FocusARView: ARView, EventSource {
                                        alignment: .horizontal)
             if let result = results.first {
                 let worldPosition = simd_make_float3(result.worldTransform.columns.3)
-                if let copy = cupEntity?.clone(recursive: true) as? ModelEntity{
-                    placeObject(copy, at: worldPosition)
-                    newCupsCounter += 1
-                    cupsCounter.wrappedValue = newCupsCounter
+                if let copy = potEntity?.clone(recursive: true) as? ModelEntity{
+                    placeObject(copy, at: worldPosition, type: .pot)
+                    newPotsCounter += 1
+                    potsCounter.wrappedValue = newPotsCounter
                 }
             }
             if newCupsCounter == 1 {
-                placeCoins()
+                placeCups()
             }
         }
         
@@ -107,12 +108,12 @@ class FocusARView: ARView, EventSource {
         let gestureLocation = recognizer.location(in: self)
         if  let entity = entity(at: gestureLocation) {
             if let anchor = entity.anchor,
-               anchor.name == "cup" {
+               anchor.name == ModelType.pot.name {
                 anchor.removeFromParent()
-                newCupsCounter -= 1
-                cupsCounter.wrappedValue = newCupsCounter
-                if newCupsCounter == 0 {
-                    removeCoins()
+                newPotsCounter -= 1
+                potsCounter.wrappedValue = newPotsCounter
+                if newPotsCounter == 0 {
+                    removeCups()
                 }
             }
         } else {
@@ -120,7 +121,9 @@ class FocusARView: ARView, EventSource {
         }
     }
     
-    func placeObject(_ object: ModelEntity, at location: SIMD3<Float>) {
+    func placeObject(_ object: ModelEntity,
+                     at location: SIMD3<Float>?,
+                     type: ModelType) {
         object.generateCollisionShapes(recursive: true)
         object.physicsBody = .init()
         object.physicsBody?.massProperties.mass = 5
@@ -134,8 +137,11 @@ class FocusARView: ARView, EventSource {
         let cupFilter = CollisionFilter(group: cupGroup,
                                                   mask: cupMask)
         object.collision?.filter = cupFilter
-        let objectAnchor = AnchorEntity(world: location)
-        objectAnchor.name = "cup"
+        var objectAnchor = AnchorEntity(plane: .horizontal)
+        if let location {
+            objectAnchor = AnchorEntity(world: location)
+        }
+        objectAnchor.name = type.name
         objectAnchor.addChild(object)
         installGestures(.all, for: object)
         scene.anchors.append(objectAnchor)
@@ -157,36 +163,11 @@ class FocusARView: ARView, EventSource {
       })
     }
     
-    func placeFiveCoins() {
+    func removeCups() {
         
     }
     
-    func removeCoins() {
-        
-    }
-    
-    func placeCoin(_ object: ModelEntity, at location: SIMD3<Float>) {
-        object.generateCollisionShapes(recursive: true)
-        object.physicsBody = .init()
-        object.physicsBody?.massProperties.mass = 5
-        object.physicsBody?.mode = .kinematic
-    //    object.collision =  CollisionComponent(
-//            shapes: [ShapeResource.generateSphere(radius: 0.2)],
-//            mode: .trigger,
-//            filter: .sensor
-//        )
-        let cupMask = CollisionGroup.all.subtracting(cupGroup)
-        let cupFilter = CollisionFilter(group: cupGroup,
-                                                  mask: cupMask)
-        object.collision?.filter = cupFilter
-        let objectAnchor = AnchorEntity(world: location)
-        objectAnchor.name = "coin"
-        objectAnchor.addChild(object)
-        installGestures(.all, for: object)
-        scene.anchors.append(objectAnchor)
-    }
-    
-    func moveCups(by motion: Binding<Motion?>) {
+    func movePots(by motion: Binding<Motion?>) {
         var transform = Transform()
         guard let motion = motion.wrappedValue else { return }
         switch motion.direction {
@@ -199,37 +180,23 @@ class FocusARView: ARView, EventSource {
         case .back:
             transform.translation.z = 0.5
         }
-        let cupAnchors = scene.anchors.filter({ $0.name == "cup" })
-        let cups = cupAnchors.compactMap { $0.children[0] as? ModelEntity }
-        cups.forEach { cupModel in
+        let potAnchors = scene.anchors.filter({ $0.name == ModelType.pot.name })
+        let pots = potAnchors.compactMap { $0.children[0] as? ModelEntity }
+        pots.forEach { model in
             DispatchQueue.main.async {
-                cupModel.move(to: transform, relativeTo: nil, duration: motion.duration)
+               
             }
         }
-        self.motion.wrappedValue = nil
     }
     
-    func placeCoins() {
-        guard let coinModel = coinEntity else {
+    func placeCups() {
+        guard let cupModel = cupEntity else {
             return
         }
         for _ in 0 ..< 3 {
-            newCoinsCounter += 1
-            placeCoin(coinModel)
+            cupsCounter.wrappedValue += 1
+            placeObject(cupModel, at: nil, type: .cup)
         }
     }
-    
-    func placeCoin(_ object: ModelEntity) {
-        object.generateCollisionShapes(recursive: true)
-        object.physicsBody = .init()
-        object.physicsBody?.massProperties.mass = 5
-        object.physicsBody?.mode = .kinematic
-        let anchorEntity = AnchorEntity(plane: .horizontal)
-        anchorEntity.name = "coin"
-        anchorEntity.addChild(object.clone(recursive: true))
-        installGestures(.all, for: object)
-        scene.addAnchor(anchorEntity)
-    }
-    
     
 }

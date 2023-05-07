@@ -14,12 +14,12 @@ struct MoveCubeView : View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            ARViewContainer(coinsCounter: $viewModel.coinsCounter,
+            ARViewContainer(potsCounter: $viewModel.potsCounter,
                             cupsCounter: $viewModel.cupsCounter,
                             motion: $viewModel.motion)
             .edgesIgnoringSafeArea(.all)
-            if viewModel.cupsCounter > 0 {
-                MovementButtonsView(coinsCounter: $viewModel.coinsCounter,
+            if viewModel.potsCounter > 0 {
+                MovementButtonsView(cupsCounter: $viewModel.cupsCounter,
                                     motion: $viewModel.motion)
             }
         }

@@ -13,17 +13,16 @@ import AVFoundation
 struct ARViewContainer: UIViewRepresentable {
     
     @State var cancellable: AnyCancellable? = nil
-    @State var coinsCancellable: AnyCancellable? = nil
-    @Binding var coinsCounter: Int
+    @Binding var potsCounter: Int
     @Binding var cupsCounter: Int
     @Binding var motion: Motion?
     
     func makeUIView(context: Context) -> ARView {
-        let arView = FocusARView(cupsCounter: $cupsCounter,
-                                 coinsCounter: $coinsCounter,
+        let arView = FocusARView(potsCounter: $potsCounter,
+                                 cupsCounter: $cupsCounter,
                                  motion: $motion)
-        downloadCupModel(for: arView)
-        downloadCoinModel(for: arView)
+        downloadModel(type: .pot, for: arView)
+        downloadModel(type: .cup, for: arView)
         return arView
     }
     
@@ -31,14 +30,7 @@ struct ARViewContainer: UIViewRepresentable {
         
     }
     
-    func downloadCupModel(for arView: FocusARView) {
-        let cupModel = ARModel(name: "cup",
-                                      modelUrlString: "https://developer.apple.com/augmented-reality/quick-look/models/cupandsaucer/cup_saucer_set.usdz",
-                                     type: "usdz")
-        download(model: cupModel, for: arView)
-    }
-    
-    func download(model: ARModel, for arView: FocusARView) {
+    func downloadModel(type model: ModelType, for arView: FocusARView) {
         let desktopURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.elenalucher.MoveCube")!
         let directory = desktopURL.appendingPathComponent("modelEntities")
         
@@ -46,7 +38,7 @@ struct ARViewContainer: UIViewRepresentable {
         let fileOnDevice = directory.appendingPathComponent(model.name).appendingPathExtension(model.type)
         Task {
             do {
-                let localTempUrl = try await tempLocalUrl(for: model.modelUrlString)
+                let localTempUrl = try await tempLocalUrl(for: model.modelLink)
                 if FileManager.default.fileExists(atPath: fileOnDevice.path) {
                     try! FileManager.default.removeItem(atPath: fileOnDevice.path)
                 }
@@ -58,9 +50,14 @@ struct ARViewContainer: UIViewRepresentable {
                                 print("Unable to load a model due to \(error)")
                             }
                             self.cancellable?.cancel()
-                        }, receiveValue: { model in
-                            model.name = "cup"
-                            arView.cupEntity = model
+                        }, receiveValue: { modelReceived in
+                            modelReceived.name = model.name
+                            switch model {
+                            case .pot:
+                                arView.potEntity = modelReceived
+                            case .cup:
+                                arView.cupEntity = modelReceived
+                            }
                         })
                 }
             } catch {
@@ -73,22 +70,6 @@ struct ARViewContainer: UIViewRepresentable {
         guard let url = URL(string: remoteUrlString) else { throw URLError(.badURL) }
         let (dataTempFileUrl, _) = try await URLSession.shared.download(from: url)
         return dataTempFileUrl
-    }
-    
-    private func downloadCoinModel(for arView: FocusARView) {
-        DispatchQueue.main.async {
-            self.coinsCancellable = Entity.loadModelAsync(named: "coin.usdz").sink(
-                receiveCompletion: { completion in
-                    if case let .failure(error) = completion {
-                        print("Unable to load a model due to \(error)")
-                    }
-                    self.coinsCancellable?.cancel()
-                }, receiveValue: { model in
-                    model.name = "coin"
-                    coinsCancellable?.cancel()
-                    arView.coinEntity = model
-                })
-        }
     }
     
 }
