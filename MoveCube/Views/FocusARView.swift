@@ -82,9 +82,13 @@ class FocusARView: ARView, EventSource {
     
     @IBAction func handleTapGesture(recognizer: UITapGestureRecognizer) {
         let tapLocation = recognizer.location(in: self)
-        if let entity = self.entity(at: tapLocation) as? ModelEntity, entity.name == ModelType.pot.name {
-            let material = SimpleMaterial(color: randomColor, isMetallic: false)
-            entity.model?.materials = [material]
+        if let entity = self.entity(at: tapLocation) as? ModelEntity {
+            if entity.name == ModelType.pot.name {
+                let material = SimpleMaterial(color: randomColor, isMetallic: false)
+                entity.model?.materials = [material]
+            } else if entity.name == ModelType.cup.name {
+                Player().play(sound: "cups")
+            }
         } else {
             let results = self.raycast(from: tapLocation,
                                        allowing: .estimatedPlane,
