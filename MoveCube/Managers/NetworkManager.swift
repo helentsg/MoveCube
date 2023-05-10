@@ -1,34 +1,17 @@
 //
-//  ARViewContainer.swift
+//  NetworkManager.swift
 //  MoveCube
 //
-//  Created by Elena Lucher on 6.5.23..
+//  Created by Elena Lucher on 10.5.23..
 //
 
 import SwiftUI
 import RealityKit
 import Combine
 
-struct ARViewContainer: UIViewRepresentable {
+struct NetworkManager {
     
     @State var cancellable: AnyCancellable? = nil
-    @Binding var potsCounter: Int
-    @Binding var cupsCounter: Int
-    @Binding var motion: Motion?
-    private let networkManager = NetworkManager()
-    
-    func makeUIView(context: Context) -> ARView {
-        let arView = FocusARView(potsCounter: $potsCounter,
-                                 cupsCounter: $cupsCounter,
-                                 motion: $motion)
-        downloadModel(type: .pot, for: arView)
-        downloadModel(type: .cup, for: arView)
-        return arView
-    }
-    
-    func updateUIView(_ uiView: ARView, context: Context) {
-        
-    }
     
     func downloadModel(type model: ModelType, for arView: FocusARView) {
         let desktopURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.elenalucher.MoveCube")!

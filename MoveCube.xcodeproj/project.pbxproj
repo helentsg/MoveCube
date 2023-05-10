@@ -14,6 +14,7 @@
 		3333EB372A081DE200282C8D /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EB362A081DE200282C8D /* Player.swift */; };
 		3333EB3A2A08209F00282C8D /* cups.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3333EB392A08209F00282C8D /* cups.mp3 */; };
 		3333EB3C2A0820A800282C8D /* remove.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3333EB3B2A0820A800282C8D /* remove.mp3 */; };
+		33569DC72A0C054B0064B5C9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33569DC62A0C054B0064B5C9 /* NetworkManager.swift */; };
 		336CFA472A056F920066EEE0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA462A056F920066EEE0 /* AppDelegate.swift */; };
 		336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA482A056F920066EEE0 /* MoveCubeView.swift */; };
 		336CFA4D2A056F930066EEE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 336CFA4C2A056F930066EEE0 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 		3333EB362A081DE200282C8D /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		3333EB392A08209F00282C8D /* cups.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cups.mp3; sourceTree = "<group>"; };
 		3333EB3B2A0820A800282C8D /* remove.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = remove.mp3; sourceTree = "<group>"; };
+		33569DC62A0C054B0064B5C9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		336CFA432A056F920066EEE0 /* MoveCube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoveCube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		336CFA462A056F920066EEE0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		336CFA482A056F920066EEE0 /* MoveCubeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCubeView.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				3333EB362A081DE200282C8D /* Player.swift */,
+				33569DC62A0C054B0064B5C9 /* NetworkManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 				3333EB302A07D34400282C8D /* Motion.swift in Sources */,
 				3333EB342A07F44900282C8D /* ModelType.swift in Sources */,
 				336CFA582A056FF80066EEE0 /* MoveCubeViewModel.swift in Sources */,
+				33569DC72A0C054B0064B5C9 /* NetworkManager.swift in Sources */,
 				336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */,
 				336CFA682A0636190066EEE0 /* MovementButton.swift in Sources */,
 				3333EB372A081DE200282C8D /* Player.swift in Sources */,

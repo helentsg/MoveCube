@@ -128,9 +128,8 @@ class FocusARView: ARView, EventSource {
                      at location: SIMD3<Float>,
                      type: ModelType) {
         object.generateCollisionShapes(recursive: true)
-        object.physicsBody = .init()
-        object.physicsBody?.massProperties.mass = 5
-        object.physicsBody?.mode = .kinematic
+        object.physicsBody = PhysicsBodyComponent()
+        object.physicsBody?.mode = type == .pot ? .dynamic : .static
         object.collision = collision(for: type)
         let mask = CollisionGroup.all.subtracting(collisionGroup)
         let filter = CollisionFilter(group: collisionGroup,
