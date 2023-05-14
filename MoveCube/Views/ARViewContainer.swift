@@ -14,13 +14,11 @@ struct ARViewContainer: UIViewRepresentable {
     @State var cancellable: AnyCancellable? = nil
     @Binding var potsCounter: Int
     @Binding var cupsCounter: Int
-    @Binding var motion: Motion?
     private let networkManager = NetworkManager()
     
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(potsCounter: $potsCounter,
-                                 cupsCounter: $cupsCounter,
-                                 motion: $motion)
+                                 cupsCounter: $cupsCounter)
         downloadModel(type: .pot, for: arView)
         downloadModel(type: .cup, for: arView)
         return arView

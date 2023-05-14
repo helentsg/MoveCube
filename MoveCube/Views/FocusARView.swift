@@ -27,26 +27,19 @@ class FocusARView: ARView, EventSource {
     } set: { newValue in
         self.newPotsCounter = newValue
     }
-    var newMotion: Motion?
-    lazy var motion = Binding {
-        return self.newMotion
-    } set: { newValue in
-        self.newMotion = newValue
-    }
+  
     private var randomColor : UIColor {
         [UIColor.yellow, UIColor.orange, UIColor.systemPink, UIColor.blue, UIColor.green, UIColor.purple, UIColor.red, UIColor.lightGray, UIColor.white].randomElement() ?? .green
     }
     var collisionSubscriptions: [Cancellable] = []
     let plane = PlaneEntity()
     let filter = CollisionFilter(group: CollisionGroup(rawValue: 1 << 0), mask: .all)
-
+    
     convenience init(potsCounter: Binding<Int>,
-                     cupsCounter: Binding<Int>,
-                     motion: Binding<Motion?>){
+                     cupsCounter: Binding<Int>){
         self.init(frame: .zero)
         self.potsCounter = potsCounter
         self.cupsCounter = cupsCounter
-        self.motion = motion
         focusEntity = FocusEntity(on: self, focus: .classic)
         focusEntity?.setAutoUpdate(to: true)
         setPlane()
@@ -150,14 +143,14 @@ class FocusARView: ARView, EventSource {
         object.physicsBody?.mode = .dynamic
         addCollisions(for: object)
     }
-
+    
     func addCollisions(for modelEntity: ModelEntity) {
         collisionSubscriptions.append(scene.subscribe(to: CollisionEvents.Began.self, on: modelEntity) {[weak self] event in
-          guard let self,
-                    let entityA = event.entityA as? ModelEntity,
-            let entityB = event.entityB as? ModelEntity else {
-          return
-        }
+            guard let self,
+                  let entityA = event.entityA as? ModelEntity,
+                  let entityB = event.entityB as? ModelEntity else {
+                return
+            }
             switch (entityA.name, entityB.name) {
             case (ModelType.pot.name, ModelType.cup.name):
                 Player().play(sound: "water")
@@ -170,37 +163,37 @@ class FocusARView: ARView, EventSource {
             default:
                 break
             }
-      })
+        })
         collisionSubscriptions.append(scene.subscribe(to: CollisionEvents.Ended.self, on: modelEntity) {  [weak self] event in
             guard let self,
-                    let entityA = event.entityA as? ModelEntity,
-              let entityB = event.entityB as? ModelEntity else {
-            return
-          }
+                  let entityA = event.entityA as? ModelEntity,
+                  let entityB = event.entityB as? ModelEntity else {
+                return
+            }
             switch (entityA.name, entityB.name) {
             case (ModelType.pot.name, ModelType.cup.name), (ModelType.cup.name, ModelType.pot.name):
                 self.reduceCupsCounter()
             default:
                 break
             }
-      })
-       
+        })
+        
     }
     
     @objc
     func panned(_ sender: UIPanGestureRecognizer) {
         switch sender.state {
-            case .ended, .cancelled, .failed:
+        case .ended, .cancelled, .failed:
             potEntity?.physicsBody?.mode = .dynamic
             cupEntity?.physicsBody?.mode = .dynamic
-            default:
-                return
+        default:
+            return
         }
     }
     
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let translationGesture = gestureRecognizer as? EntityTranslationGestureRecognizer,
-            let entity = translationGesture.entity as? ModelEntity else { return true }
+              let entity = translationGesture.entity as? ModelEntity else { return true }
         entity.physicsBody?.mode = .kinematic
         return true
     }
@@ -210,28 +203,6 @@ class FocusARView: ARView, EventSource {
         cupsCounter.wrappedValue = newCupsCounter
         let cupAnchors = scene.anchors.filter { $0.name == ModelType.cup.name }
         cupAnchors.forEach { $0.removeFromParent() }
-    }
-    
-    func movePots(by motion: Binding<Motion?>) {
-        var transform = Transform()
-        guard let motion = motion.wrappedValue else { return }
-        switch motion.direction {
-        case .left:
-            transform.translation.x = -0.5
-        case .right:
-            transform.translation.x = 0.5
-        case .forward:
-            transform.translation.z = -0.5
-        case .back:
-            transform.translation.z = 0.5
-        }
-        let potAnchors = scene.anchors.filter({ $0.name == ModelType.pot.name })
-        let pots = potAnchors.compactMap { $0.children[0] as? ModelEntity }
-        pots.forEach { model in
-            DispatchQueue.main.async {
-               
-            }
-        }
     }
     
     func reduceCupsCounter() {

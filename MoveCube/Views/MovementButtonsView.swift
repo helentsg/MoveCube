@@ -9,34 +9,15 @@ import SwiftUI
 
 struct MovementButtonsView: View {
     @Binding var cupsCounter: Int
-    @Binding var motion: Motion?
     
     var body: some View {
-        ZStack {
+        HStack() {
+            Spacer()
             VStack {
-                MovementButton(motion: $motion,
-                               direction: .back)
+                CupsCounterView(cupsCounter: $cupsCounter)
                 Spacer()
-                HStack() {
-                    MovementButton(motion: $motion,
-                                   direction: .left)
-                    Spacer()
-                    MovementButton(motion: $motion,
-                                   direction: .right)
-                }
-                Spacer()
-                MovementButton(motion: $motion,
-                               direction: .forward)
-            }
-            HStack() {
-                Spacer()
-                VStack {
-                    CupsCounterView(cupsCounter: $cupsCounter)
-                    Spacer()
-                }
             }
         }
-        
     }
     
 }

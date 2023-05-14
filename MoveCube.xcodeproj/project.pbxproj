@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3333EB002A064AD100282C8D /* CupsCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EAFF2A064AD100282C8D /* CupsCounterView.swift */; };
 		3333EB292A0674AF00282C8D /* ARModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EB282A0674AF00282C8D /* ARModel.swift */; };
-		3333EB302A07D34400282C8D /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EB2F2A07D34400282C8D /* Motion.swift */; };
 		3333EB342A07F44900282C8D /* ModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EB332A07F44900282C8D /* ModelType.swift */; };
 		3333EB372A081DE200282C8D /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333EB362A081DE200282C8D /* Player.swift */; };
 		3333EB3A2A08209F00282C8D /* cups.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3333EB392A08209F00282C8D /* cups.mp3 */; };
@@ -25,7 +24,6 @@
 		336CFA612A06309C0066EEE0 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA602A06309C0066EEE0 /* ARViewContainer.swift */; };
 		336CFA632A0633EB0066EEE0 /* MovementButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */; };
 		336CFA662A0635720066EEE0 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA652A0635720066EEE0 /* Direction.swift */; };
-		336CFA682A0636190066EEE0 /* MovementButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA672A0636190066EEE0 /* MovementButton.swift */; };
 		33AB90C92A112A9100C3E3A5 /* PlaneEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33AB90C82A112A9100C3E3A5 /* PlaneEntity.swift */; };
 		33AB90CB2A113DCF00C3E3A5 /* water.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33AB90CA2A113DCF00C3E3A5 /* water.mp3 */; };
 /* End PBXBuildFile section */
@@ -34,7 +32,6 @@
 		3333EAFF2A064AD100282C8D /* CupsCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CupsCounterView.swift; sourceTree = "<group>"; };
 		3333EB272A0672A700282C8D /* MoveCube.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MoveCube.entitlements; sourceTree = "<group>"; };
 		3333EB282A0674AF00282C8D /* ARModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARModel.swift; sourceTree = "<group>"; };
-		3333EB2F2A07D34400282C8D /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
 		3333EB332A07F44900282C8D /* ModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelType.swift; sourceTree = "<group>"; };
 		3333EB362A081DE200282C8D /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		3333EB392A08209F00282C8D /* cups.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cups.mp3; sourceTree = "<group>"; };
@@ -50,7 +47,6 @@
 		336CFA602A06309C0066EEE0 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
 		336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementButtonsView.swift; sourceTree = "<group>"; };
 		336CFA652A0635720066EEE0 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
-		336CFA672A0636190066EEE0 /* MovementButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementButton.swift; sourceTree = "<group>"; };
 		33AB90C82A112A9100C3E3A5 /* PlaneEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneEntity.swift; sourceTree = "<group>"; };
 		33AB90CA2A113DCF00C3E3A5 /* water.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = water.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -142,7 +138,6 @@
 				33AB90C82A112A9100C3E3A5 /* PlaneEntity.swift */,
 				336CFA602A06309C0066EEE0 /* ARViewContainer.swift */,
 				336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */,
-				336CFA672A0636190066EEE0 /* MovementButton.swift */,
 				3333EAFF2A064AD100282C8D /* CupsCounterView.swift */,
 			);
 			path = Views;
@@ -153,7 +148,6 @@
 			children = (
 				336CFA652A0635720066EEE0 /* Direction.swift */,
 				3333EB282A0674AF00282C8D /* ARModel.swift */,
-				3333EB2F2A07D34400282C8D /* Motion.swift */,
 				3333EB332A07F44900282C8D /* ModelType.swift */,
 			);
 			path = Model;
@@ -238,12 +232,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3333EB302A07D34400282C8D /* Motion.swift in Sources */,
 				3333EB342A07F44900282C8D /* ModelType.swift in Sources */,
 				336CFA582A056FF80066EEE0 /* MoveCubeViewModel.swift in Sources */,
 				33569DC72A0C054B0064B5C9 /* NetworkManager.swift in Sources */,
 				336CFA492A056F920066EEE0 /* MoveCubeView.swift in Sources */,
-				336CFA682A0636190066EEE0 /* MovementButton.swift in Sources */,
 				3333EB372A081DE200282C8D /* Player.swift in Sources */,
 				336CFA472A056F920066EEE0 /* AppDelegate.swift in Sources */,
 				33AB90C92A112A9100C3E3A5 /* PlaneEntity.swift in Sources */,
