@@ -36,9 +36,10 @@ class FocusARView: ARView, EventSource {
     private var randomColor : UIColor {
         [UIColor.yellow, UIColor.orange, UIColor.systemPink, UIColor.blue, UIColor.green, UIColor.purple, UIColor.red, UIColor.lightGray, UIColor.white].randomElement() ?? .green
     }
-    var collisionSubs: [Cancellable] = []
-    let collisionGroup = CollisionGroup(rawValue: 1 << 0)
-    
+    var collisionSubscriptions: [Cancellable] = []
+    let plane = PlaneEntity()
+    let filter = CollisionFilter(group: CollisionGroup(rawValue: 1 << 0), mask: .all)
+
     convenience init(potsCounter: Binding<Int>,
                      cupsCounter: Binding<Int>,
                      motion: Binding<Motion?>){
@@ -48,9 +49,9 @@ class FocusARView: ARView, EventSource {
         self.motion = motion
         focusEntity = FocusEntity(on: self, focus: .classic)
         focusEntity?.setAutoUpdate(to: true)
+        setPlane()
         configure()
-        addCollisions()
-        enableTapGesture()
+        enableGestures()
     }
     
     required init(frame frameRect: CGRect){
@@ -71,11 +72,14 @@ class FocusARView: ARView, EventSource {
         session.run(config)
     }
     
-    func enableTapGesture() {
+    func enableGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(recognizer:)))
         self.addGestureRecognizer(tapGesture)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongTapGesture))
         self.addGestureRecognizer(longPressRecognizer)
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
+        panGesture.delegate = self
+        addGestureRecognizer(panGesture)
     }
     
     @IBAction func handleTapGesture(recognizer: UITapGestureRecognizer) {
@@ -124,55 +128,81 @@ class FocusARView: ARView, EventSource {
         }
     }
     
+    func setPlane() {
+        plane.collision?.filter = filter
+        let planeAnchor = AnchorEntity(plane: .horizontal)
+        planeAnchor.addChild(plane)
+        scene.addAnchor(planeAnchor)
+    }
+    
     func placeObject(_ object: ModelEntity,
                      at location: SIMD3<Float>,
                      type: ModelType) {
         object.generateCollisionShapes(recursive: true)
         object.physicsBody = PhysicsBodyComponent()
-        object.physicsBody?.mode = type == .pot ? .dynamic : .static
-        object.collision = collision(for: type)
-        let mask = CollisionGroup.all.subtracting(collisionGroup)
-        let filter = CollisionFilter(group: collisionGroup,
-                                                  mask: mask)
+        object.physicsBody?.mode = .static
         object.collision?.filter = filter
         let objectAnchor = AnchorEntity(world: location)
         objectAnchor.name = type.name
         objectAnchor.addChild(object)
         installGestures(.all, for: object)
-        scene.anchors.append(objectAnchor)
+        plane.addChild(objectAnchor)
+        object.physicsBody?.mode = .dynamic
+        addCollisions(for: object)
     }
-    
-    func collision(for type: ModelType) -> CollisionComponent {
-        switch type {
-        case .pot:
-            return CollisionComponent(
-                shapes: [ShapeResource.generateCapsule(height: 20, radius: 10)],
-                mode: .trigger,
-                filter: .sensor
-            )
-        case .cup:
-            return CollisionComponent(
-                shapes: [ShapeResource.generateCapsule(height: 30, radius: 20)],
-                mode: .trigger,
-                filter: .sensor
-            )
-        }
-    }
-    
-    func addCollisions() {
-      collisionSubs.append(scene.subscribe(to: CollisionEvents.Began.self, on: self) { event in
-          guard let entity = event.entityA as? ModelEntity else {
-          return
-        }
 
-          entity.model?.materials = [SimpleMaterial(color: .red, isMetallic: false)]
-      })
-      collisionSubs.append(scene.subscribe(to: CollisionEvents.Ended.self, on: self) { event in
-          guard let entity = event.entityA as? ModelEntity else {
+    func addCollisions(for modelEntity: ModelEntity) {
+        collisionSubscriptions.append(scene.subscribe(to: CollisionEvents.Began.self, on: modelEntity) {[weak self] event in
+          guard let self,
+                    let entityA = event.entityA as? ModelEntity,
+            let entityB = event.entityB as? ModelEntity else {
           return
         }
-          entity.model?.materials = [SimpleMaterial(color: .yellow, isMetallic: false)]
+            switch (entityA.name, entityB.name) {
+            case (ModelType.pot.name, ModelType.cup.name):
+                Player().play(sound: "water")
+            case (ModelType.pot.name, ModelType.pot.name):
+                Player().play(sound: "remove")
+            case (ModelType.cup.name, ModelType.cup.name):
+                Player().play(sound: "cups")
+            case (ModelType.cup.name, ModelType.pot.name):
+                Player().play(sound: "water")
+            default:
+                break
+            }
       })
+        collisionSubscriptions.append(scene.subscribe(to: CollisionEvents.Ended.self, on: modelEntity) {  [weak self] event in
+            guard let self,
+                    let entityA = event.entityA as? ModelEntity,
+              let entityB = event.entityB as? ModelEntity else {
+            return
+          }
+            switch (entityA.name, entityB.name) {
+            case (ModelType.pot.name, ModelType.cup.name), (ModelType.cup.name, ModelType.pot.name):
+                self.reduceCupsCounter()
+            default:
+                break
+            }
+      })
+       
+    }
+    
+    @objc
+    func panned(_ sender: UIPanGestureRecognizer) {
+        switch sender.state {
+            case .ended, .cancelled, .failed:
+            potEntity?.physicsBody?.mode = .dynamic
+            cupEntity?.physicsBody?.mode = .dynamic
+            default:
+                return
+        }
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let translationGesture = gestureRecognizer as? EntityTranslationGestureRecognizer,
+            let entity = translationGesture.entity as? ModelEntity else { return true }
+        entity.physicsBody?.mode = .kinematic
+        return true
     }
     
     func removeCups() {
@@ -201,6 +231,13 @@ class FocusARView: ARView, EventSource {
             DispatchQueue.main.async {
                
             }
+        }
+    }
+    
+    func reduceCupsCounter() {
+        if newCupsCounter > 0 {
+            newCupsCounter -= 1
+            cupsCounter.wrappedValue = newCupsCounter
         }
     }
     

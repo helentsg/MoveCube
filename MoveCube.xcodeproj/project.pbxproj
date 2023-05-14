@@ -26,6 +26,8 @@
 		336CFA632A0633EB0066EEE0 /* MovementButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */; };
 		336CFA662A0635720066EEE0 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA652A0635720066EEE0 /* Direction.swift */; };
 		336CFA682A0636190066EEE0 /* MovementButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CFA672A0636190066EEE0 /* MovementButton.swift */; };
+		33AB90C92A112A9100C3E3A5 /* PlaneEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33AB90C82A112A9100C3E3A5 /* PlaneEntity.swift */; };
+		33AB90CB2A113DCF00C3E3A5 /* water.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 33AB90CA2A113DCF00C3E3A5 /* water.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +51,8 @@
 		336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementButtonsView.swift; sourceTree = "<group>"; };
 		336CFA652A0635720066EEE0 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		336CFA672A0636190066EEE0 /* MovementButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementButton.swift; sourceTree = "<group>"; };
+		33AB90C82A112A9100C3E3A5 /* PlaneEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneEntity.swift; sourceTree = "<group>"; };
+		33AB90CA2A113DCF00C3E3A5 /* water.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = water.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +79,7 @@
 		3333EB382A08208C00282C8D /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				33AB90CA2A113DCF00C3E3A5 /* water.mp3 */,
 				3333EB3B2A0820A800282C8D /* remove.mp3 */,
 				3333EB392A08209F00282C8D /* cups.mp3 */,
 			);
@@ -134,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				336CFA5B2A062EDC0066EEE0 /* FocusARView.swift */,
+				33AB90C82A112A9100C3E3A5 /* PlaneEntity.swift */,
 				336CFA602A06309C0066EEE0 /* ARViewContainer.swift */,
 				336CFA622A0633EB0066EEE0 /* MovementButtonsView.swift */,
 				336CFA672A0636190066EEE0 /* MovementButton.swift */,
@@ -221,6 +227,7 @@
 				336CFA4D2A056F930066EEE0 /* Assets.xcassets in Resources */,
 				3333EB3C2A0820A800282C8D /* remove.mp3 in Resources */,
 				3333EB3A2A08209F00282C8D /* cups.mp3 in Resources */,
+				33AB90CB2A113DCF00C3E3A5 /* water.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +246,7 @@
 				336CFA682A0636190066EEE0 /* MovementButton.swift in Sources */,
 				3333EB372A081DE200282C8D /* Player.swift in Sources */,
 				336CFA472A056F920066EEE0 /* AppDelegate.swift in Sources */,
+				33AB90C92A112A9100C3E3A5 /* PlaneEntity.swift in Sources */,
 				3333EB292A0674AF00282C8D /* ARModel.swift in Sources */,
 				336CFA662A0635720066EEE0 /* Direction.swift in Sources */,
 				336CFA5C2A062EDC0066EEE0 /* FocusARView.swift in Sources */,
